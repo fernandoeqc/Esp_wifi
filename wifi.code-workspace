@@ -1,13 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "wifi_ap_esp"
-		},
-		{
 			"path": "wifi_client_esp"
 		},
 		{
-			"path": ".git"
+			"path": "wifi_ap_esp"
 		}
 	],
 	"settings": {}

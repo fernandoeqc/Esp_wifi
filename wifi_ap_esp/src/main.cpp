@@ -40,6 +40,11 @@
 #define ERRO_DADOS 26 //E2
 #define BUT 27
 
+#define ATIVA 0
+#define RESETA 1
+
+#define TEMPO_BLOQ 4
+
 unsigned long currentMillis;
 unsigned long previousMillis;
 static unsigned long counter = 0;
@@ -103,14 +108,14 @@ void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len)
         {
             error++;
 
-            digitalWrite(ERRO_DADOS, LOW);
+            digitalWrite(ERRO_DADOS, ATIVA);
             printf("erro: %d ####### ", error);
             // adicionar millis ao sd  ==== millis();
         }
         //Tudo certo
         else
         {
-            digitalWrite(ERRO_DADOS, HIGH);
+            digitalWrite(ERRO_DADOS, RESETA);
         }
     }
 
@@ -127,8 +132,8 @@ void setup()
     pinMode(ERRO_DADOS, OUTPUT);
     pinMode(BUT, INPUT_PULLUP);
 
-    digitalWrite(ERRO_TEMPO, LOW);
-    digitalWrite(ERRO_DADOS, LOW);
+    digitalWrite(ERRO_TEMPO, RESETA);
+    digitalWrite(ERRO_DADOS, RESETA);
 
     Serial.begin(115200);
     Serial.println("ESPNow/Basic/Slave Example");
@@ -154,22 +159,22 @@ void loop()
 
     currentMillis = millis();
 
-    if (currentMillis - previousMillis >= 4000)
+    if (currentMillis - previousMillis >= 1000)
     {
         previousMillis = currentMillis;
 
         counter++;
 
-        if (counter > 4)
+        if (counter > TEMPO_BLOQ)
         {
             Serial.printf("Perda de comunicacao, millis: %lu\n", millis());
             digitalWrite(LED1, HIGH);
-            digitalWrite(ERRO_TEMPO, LOW);
+            digitalWrite(ERRO_TEMPO, ATIVA);
         }
         else
         {
             digitalWrite(LED1, LOW);
-            digitalWrite(ERRO_TEMPO, HIGH);
+            digitalWrite(ERRO_TEMPO, RESETA);
         }
 
         if(!digitalRead(BUT))
@@ -178,8 +183,8 @@ void loop()
             {
                 test_but = 0;
                 digitalWrite(LED1, HIGH);
-                digitalWrite(ERRO_TEMPO, LOW);
-                digitalWrite(ERRO_DADOS, LOW);
+                digitalWrite(ERRO_TEMPO, RESETA);
+                digitalWrite(ERRO_DADOS, RESETA);
             }
         }
         else test_but = 1;

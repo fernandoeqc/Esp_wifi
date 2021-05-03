@@ -249,7 +249,7 @@ void loop() {
       // pair success or already paired
       // Send data to device
       Serial.println("envie aqui");
-      //sendData();
+      sendData();
     } else {
       // slave pair failed
       Serial.println("Slave pair failed!");
